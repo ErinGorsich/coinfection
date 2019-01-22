@@ -1,4 +1,3 @@
-rm(list = ls())
 #####################################################
 #####################################################
 #####################################################
@@ -11,7 +10,8 @@ library("deSolve")
 library("doParallel")
 library("foreach")
 
-setwd("~/Documents/collaborations/Bree-Carrie-BTBcoinfection_paper/code/24-May-2017 update/R figures")
+setwd("~/git/coinfection")
+data.dir <- "~/Documents/collaborations/Bree-Carrie-BTBcoinfection_paper/code/24-May-2017 update/R figures/"
 # Parameter files (must read fixed first)
 source('fixedparams.R', chdir = TRUE)
 source('chronicmildparams.R', chdir = TRUE)
@@ -20,7 +20,7 @@ source('chronicmildparams.R', chdir = TRUE)
 source('rhs.R', chdir = TRUE)
 source('get_summary_stats.R', chdir = TRUE)
 
-bins <- 12  # currently at 12 , 50
+bins <- 50  # currently at 12
 
 #####################################################
 #####################################################
@@ -83,7 +83,8 @@ dfDDchronic <- as.data.frame(cbind(dfDD, DDchronic))
 # save results
 dfDDchronic$change_beta_tc <- dfDDchronic$beta_tc/params$beta_c
 dfDDchronic$change_alpha_tc <- dfDDchronic$alpha_tc/ params$alpha_c
-write.csv(dfDDchronic, "chronic_densitydependent_2019.csv")
+write.csv(dfDDchronic, 
+    paste(data.dir, "chronic_densitydependent_2019.csv", sep = ""))
 rm(params)
 
 #####################################################
@@ -136,7 +137,8 @@ dfFDchronic <- as.data.frame(cbind(dfFD, FDchronic))
 
 dfFDchronic$change_beta_tc <- dfFDchronic$beta_tc/params$beta_c
 dfFDchronic$change_alpha_tc <- dfFDchronic$alpha_tc/ params$alpha_c
-write.csv(dfFDchronic, "chronic_frequencydependent_2019.csv")
+write.csv(dfFDchronic, 
+    paste(data.dir, "chronic_frequencydependent_2019.csv", sep = ""))
 rm(params)
 print("Chronic models finished")
 
@@ -195,7 +197,8 @@ dfDDacute <- as.data.frame(cbind(dfDD, DDacute))
 dfDDacute$change_beta_tu <- dfDDacute$beta_tu/params$beta_u
 dfDDacute$change_gamma_tu <- dfDDacute$gamma_tu/ params$gamma_u
 dfDDacute_recov<- dfDDacute
-write.csv(dfDDacute_recov, "acute_densitydependent_recov_2019.csv")
+write.csv(dfDDacute_recov, 
+    paste(data.dir, "acute_densitydependent_recov_2019.csv", sep = ""))
 rm(params)
 
 #####################################################
@@ -251,7 +254,8 @@ dfDDacute <- as.data.frame(cbind(dfDD, DDacute))
 # DeSolve errors
 dfDDacute$change_beta_tu <- dfDDacute$beta_tu/params$beta_u
 dfDDacute$change_alpha_tu <- dfDDacute$alpha_tu/ params$alpha_u
-write.csv(dfDDacute, "acute_densitydependent_2019.csv")
+write.csv(dfDDacute, 
+    paste(data.dir, "acute_densitydependent_2019.csv", sep = ""))
 rm(params)
 
 #####################################################
@@ -308,7 +312,8 @@ dfFDacute <- as.data.frame(cbind(dfFD, FDacute))
 dfFDacute$change_beta_tu <- dfFDacute$beta_tu/ params$beta_u
 dfFDacute$change_gamma_tu <- dfFDacute$gamma_tu / params$gamma_u
 dfFDacute_recov<- dfFDacute
-write.csv(dfFDacute_recov, "acute_frequencydependent_recov_2019.csv")
+write.csv(dfFDacute_recov, 
+    paste(data.dir, "acute_frequencydependent_recov_2019.csv", sep = ""))
 rm(params)
 
 #####################################################
@@ -364,5 +369,6 @@ dfFDacute <- as.data.frame(cbind(dfFD, FDacute))
 dfFDacute$change_beta_tu <- dfFDacute$beta_tu/ params$beta_u
 dfFDacute$change_alpha_tu <- dfFDacute$alpha_tu/ params$alpha_u
 
-write.csv(dfFDacute, "acute_frequencydependent_2019.csv")
+write.csv(dfFDacute, 
+    paste(data.dir, "acute_frequencydependent_2019.csv", sep = ""))
 rm(params)
