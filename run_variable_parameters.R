@@ -169,7 +169,7 @@ dfDD2 <- data.frame(
     RoAT = NA, MaxA = NA, TimeMax = NA, MaxR = NA,
     EE_FinalN = NA, EE_R = NA, EE_TB = NA, EE_I = NA,
     EE_RinnoTB = NA, EE_RinTB = NA)	
-dfDD <- rbind(dfDD, dfDD)	
+dfDD <- rbind(dfDD, dfDD2)	
 dfDD$rowid <- seq(1, length(dfDD[,1]), 1)
 dfDD <- dfDD[, c(1:3, length(dfDD))]
 
@@ -226,7 +226,7 @@ dfDD2 <- data.frame(
     RoAT = NA, MaxA = NA, TimeMax = NA, MaxR = NA,
     EE_FinalN = NA, EE_R = NA, EE_TB = NA, EE_I = NA,
     EE_RinnoTB = NA, EE_RinTB = NA)	
-dfDD <- rbind(dfDD, dfDD)	
+dfDD <- rbind(dfDD, dfDD2)	
 dfDD$rowid <- seq(1, length(dfDD[,1]), 1)
 dfDD <- dfDD[, c(1:3, length(dfDD))]
 
@@ -259,7 +259,7 @@ write.csv(dfDDacute,
 rm(params)
 
 #####################################################
-# Acute Frequency dependent model 
+# Acute Frequency dependent model, recovery 
 #####################################################
 params <- c(fixedparams, acutemildhightransFD)
 
@@ -293,7 +293,7 @@ dfFD <- dfFD[, c(1:3, length(dfFD))]
 cl <- makeCluster(3)
 registerDoParallel(cl)
 
-FDacute <- foreach (d = iter(dfDD, by = "row"), .combine = rbind,
+FDacute <- foreach (d = iter(dfFD, by = "row"), .combine = rbind,
     .packages = "deSolve") %dopar%{
     params <- c(fixedparams, chronicmildparams)
     params$beta_tu <- d$beta_tu
@@ -349,7 +349,7 @@ dfFD <- dfFD[, c(1:3, length(dfFD))]
 cl <- makeCluster(3)
 registerDoParallel(cl)
 
-FDacute <- foreach (d = iter(dfDD, by = "row"), .combine = rbind,
+FDacute <- foreach (d = iter(dfFD, by = "row"), .combine = rbind,
     .packages = "deSolve") %dopar%{
     params <- c(fixedparams, chronicmildparams)
     params$beta_tu <- d$beta_tu
