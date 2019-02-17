@@ -345,7 +345,7 @@ dfFD <- dfFD[, c(1:3, length(dfFD))]
 cl <- makeCluster(7)
 registerDoParallel(cl)
 
-FDacute <- foreach (d = iter(dfDD, by = "row"), .combine = rbind,
+FDacute <- foreach (d = iter(dfFD, by = "row"), .combine = rbind,
     .packages = "deSolve") %dopar%{
     params$beta_tu <- d$beta_tu
     params$alpha_tu <- d$alpha_tu
