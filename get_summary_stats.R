@@ -17,7 +17,7 @@ get_chronic_summary_stats_DD = function(params){
     		(beta_tc * EE_TB) / (mu + alpha_tc)
 		
 		# get EE co-infection conditions
-		times <- seq(0, 90000, 1)
+		times <- seq(0, 150000, 1)
 		S0 <- EE_suscept-1
 		It0 <- EE_TB
 		Itc0 <- 0
@@ -62,7 +62,7 @@ get_chronic_summary_stats_FD = function(params){
     		(EE_TB / Total_TB) * (beta_tc) / (mu + alpha_tc)
 		
 		# get EE co-infection conditions
-		times <- seq(0, 400000, 1)
+		times <- seq(0, 150000, 1)
 		S0 <- EE_suscept-1; 
 		It0 <- EE_TB
 		Itc0 <- 0
@@ -102,7 +102,7 @@ get_acute_summary_stats_DD = function(params){
 			(beta_tu*EE_TB)/(mu+alpha_tu+gamma_tu)
 		 
 		# get EE co-infection conditions
-		times <- seq(0, 90000, 1)
+		times <- seq(0, 150000, 1)
 		S0 <- EE_suscept - 1
   		It0 <- EE_TB
   		Itu0 <- 0
@@ -152,7 +152,7 @@ get_acute_summary_stats_FD = function(params){
 			(mu+alpha_tu+gamma_tu)*(1/TotalPop_TB)
 			
 		# get EE co-infection conditions
-		times <- seq(0, 90000, 1)
+		times <- seq(0, 150000, 1)
 		S0 <- EE_suscept - 1
   		It0 <- EE_TB
   		Itu0 <- 0

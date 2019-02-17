@@ -10,11 +10,12 @@ library("deSolve")
 library("doParallel")
 library("foreach")
 
-setwd("~/git/coinfection")
+setwd("~/GitHub/coinfection")
 data.dir <- "~/Documents/collaborations/Bree-Carrie-BTBcoinfection_paper/code/24-May-2017 update/R figures/"
 # Parameter files (must read fixed first)
 source('fixedparams.R', chdir = TRUE)
 source('chronicmildparams.R', chdir = TRUE)
+source('acutemildparams.R', chdir = TRUE)
 
 # RHS & Summary stats calculations
 source('rhs.R', chdir = TRUE)
@@ -145,8 +146,6 @@ print("Chronic models finished")
 #####################################################
 # Acute Density dependent model, gamma
 #####################################################
-source('~/Documents/collaborations/Bree-Carrie-BTBcoinfection_paper/code/24-May-2017 update/R figures/acutemildparams.R', chdir = TRUE)
-
 params <- c(fixedparams, acutemildhightrans)
 
 dfDD <- data.frame(
@@ -169,17 +168,16 @@ dfDD2 <- data.frame(
     RoAT = NA, MaxA = NA, TimeMax = NA, MaxR = NA,
     EE_FinalN = NA, EE_R = NA, EE_TB = NA, EE_I = NA,
     EE_RinnoTB = NA, EE_RinTB = NA)	
-dfDD <- rbind(dfDD, dfDD)	
+dfDD <- rbind(dfDD, dfDD2)	
 dfDD$rowid <- seq(1, length(dfDD[,1]), 1)
 dfDD <- dfDD[, c(1:3, length(dfDD))]
 
 # start cluster
-cl <- makeCluster(3)
+cl <- makeCluster(6)
 registerDoParallel(cl)
 
 DDacute <- foreach (d = iter(dfDD, by = "row"), .combine = rbind,
     .packages = "deSolve") %dopar%{
-    params <- c(fixedparams, chronicmildparams)
     params$beta_tu <- d$beta_tu
     params$gamma_tu <- d$gamma_tu
     rowid <- d$rowid
@@ -226,17 +224,16 @@ dfDD2 <- data.frame(
     RoAT = NA, MaxA = NA, TimeMax = NA, MaxR = NA,
     EE_FinalN = NA, EE_R = NA, EE_TB = NA, EE_I = NA,
     EE_RinnoTB = NA, EE_RinTB = NA)	
-dfDD <- rbind(dfDD, dfDD)	
+dfDD <- rbind(dfDD, dfDD2)	
 dfDD$rowid <- seq(1, length(dfDD[,1]), 1)
 dfDD <- dfDD[, c(1:3, length(dfDD))]
 
 # start cluster
-cl <- makeCluster(3)
+cl <- makeCluster(7)
 registerDoParallel(cl)
 
 DDacute <- foreach (d = iter(dfDD, by = "row"), .combine = rbind,
     .packages = "deSolve") %dopar%{
-    params <- c(fixedparams, chronicmildparams)
     params$beta_tu <- d$beta_tu
     params$alpha_tu <- d$alpha_tu
     rowid <- d$rowid
@@ -259,7 +256,7 @@ write.csv(dfDDacute,
 rm(params)
 
 #####################################################
-# Acute Frequency dependent model 
+# Acute Frequency dependent model, recovery 
 #####################################################
 params <- c(fixedparams, acutemildhightransFD)
 
@@ -290,12 +287,11 @@ dfFD$rowid <- seq(1, length(dfFD[,1]), 1)
 dfFD <- dfFD[, c(1:3, length(dfFD))]
 
 # start cluster
-cl <- makeCluster(3)
+cl <- makeCluster(7)
 registerDoParallel(cl)
 
-FDacute <- foreach (d = iter(dfDD, by = "row"), .combine = rbind,
+FDacute <- foreach (d = iter(dfFD, by = "row"), .combine = rbind,
     .packages = "deSolve") %dopar%{
-    params <- c(fixedparams, chronicmildparams)
     params$beta_tu <- d$beta_tu
     params$gamma_tu <- d$gamma_tu
     rowid <- d$rowid
@@ -346,12 +342,11 @@ dfFD$rowid <- seq(1, length(dfFD[,1]), 1)
 dfFD <- dfFD[, c(1:3, length(dfFD))]
 
 # start cluster
-cl <- makeCluster(3)
+cl <- makeCluster(7)
 registerDoParallel(cl)
 
 FDacute <- foreach (d = iter(dfDD, by = "row"), .combine = rbind,
     .packages = "deSolve") %dopar%{
-    params <- c(fixedparams, chronicmildparams)
     params$beta_tu <- d$beta_tu
     params$alpha_tu <- d$alpha_tu
     rowid <- d$rowid
