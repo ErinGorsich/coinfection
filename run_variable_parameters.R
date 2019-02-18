@@ -111,11 +111,11 @@ dfFD2 <- data.frame(
 	rep(params$alpha_tc, bins)),
 	type = rep("observed", bins*2),
 	RoCT = NA, EE_C = NA, EE_TB = NA, 
-	EE_CinS = NA, EE_CinTB = NA, FinalN = NA )	
+	EE_CinS = NA, EE_CinTB = NA, FinalN = NA)	
 dfFD <- rbind(dfFD, dfFD2)	
-dfFD$rowid <- seq(1, length(dfFD[,1]), 1)
-dfFD <- dfFD[, c(1:3, length(dfFD))]
-	
+dfFD$rowid <- seq(1, length(dfFD[ ,1]), 1)
+dfFD <- dfFD[ , c(1:3, length(dfFD))]
+
 # start cluster
 cl <- makeCluster(3)
 registerDoParallel(cl)
