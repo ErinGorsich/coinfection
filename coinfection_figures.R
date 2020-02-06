@@ -1,5 +1,7 @@
 library(ggplot2)
 library(lattice)
+library(latticeExtra)
+library(RColorBrewer)
 
 ###################################################
 ###################################################
@@ -36,7 +38,7 @@ ggplot(data = df, aes(x = label, y = change)) +
 
 ###################################################
 ###################################################
-# FIGURE 2: 
+# FIGURE 2:
 ###################################################
 ###################################################
 setwd("~/Documents/collaborations/Bree-Carrie-BTBcoinfection_paper/code/24-May-2017 update/R figures")
@@ -45,32 +47,21 @@ source('~/git/coinfection/acutemildparams.R', chdir = TRUE)
 source('~/git/coinfection/chronicmildparams.R', chdir = TRUE)
 add <- read.csv("acute_densitydependent_recov_2019.csv")
 add <- add[add$type == "variable", ]
+summary(data.frame(table(add$change_beta_tu, add$change_gamma_tu)))
 add$recov <- 1/add$change_gamma_tu
+
 cdd <- read.csv("chronic_densitydependent_2019.csv")
 cdd <- cdd[cdd$type == "variable", ]
+summary(data.frame(table(cdd$change_beta_tc, cdd$change_alpha_tc)))
+
 addm <- read.csv("acute_densitydependent_2019.csv")
 addm <- addm[addm$type == "variable", ]
-
-# p <- ggplot(data = add, aes(x = gamma_tu, y = beta_tu, fill = EE_R)) +
-#     geom_raster(interpolate = TRUE) +
-#     theme_bw() + 
-#     xlab("Proportional increase in infection duration with co-infection") + 
-#     ylab("Proportional increase in transmission with co-infection") +
-#     #geom_title("Acute pathogen; density-dependent transmission") +
-#     theme(panel.grid.major = element_blank(), 
-#         plot.title = element_text(size = 14),  # 14 in pdf format
-#         axis.title = element_text(size = 12), 
-#         axis.text = element_text(size = 12), # 12 
-#         legend.text = element_text(size=12),  # 12 
-#         legend.title = element_text(size = 14),
-#         legend.text.align = 1, 
-#         legend.key.size = unit(1, "cm") )
+summary(data.frame(table(addm$change_beta_tu, addm$change_alpha_tu)))
 
 cols <- colorRampPalette(brewer.pal(9, "Greens"))(50)
 
 ylim = c(min(c(addm$RoAT, add$RoAT, cdd$RoC)),
-    max(c(addm$RoAT, add$RoAT, cdd$RoC))+0.1)
-#ylim = c(1, 7)
+    max(c(addm$RoAT, add$RoAT, cdd$RoC)) + 0.1)
 
 p <- levelplot(RoAT~ recov*change_beta_tu, data= add,
     at = seq(ylim[1], ylim[2], (ylim[2] - ylim[1])/20),
@@ -79,7 +70,7 @@ p <- levelplot(RoAT~ recov*change_beta_tu, data= add,
     xlab = expression(paste("Proportional change in infection duration,", 
         gamma[a]/gamma[ta])), 
     col.regions=cols, main="Acute", cex.lab=1.2, 
-    colorkey = FALSE)
+    colorkey = FALSE, interpolate = TRUE, useRaster = TRUE)
 plot(p, position = c(0, 0, 1/3, 1), more = TRUE) 
 p2 <- levelplot(RoAT~ change_alpha_tu*change_beta_tu, 
     data= addm, at = seq(ylim[1], ylim[2], (ylim[2] - ylim[1])/20), 
@@ -143,3 +134,21 @@ legend <- levelplot(EE_C~ change_alpha_tc*change_beta_tc,
         beta[tc]/beta[c])),
     xlab = expression(paste("Proportional change in mortality,", 
         alpha[ta]/alpha[a])), colorkey = TRUE )
+
+# GGPlot Version - don't work because how multiplicitive axes look! 
+# p <- ggplot(data = add, aes(x = recov, y = change_beta_tu, fill = RoAT)) +
+#     geom_raster(interpolate = TRUE) +
+#     theme_bw() + 
+#     xlab("Proportional increase in infection duration with co-infection") + 
+#     ylab("Proportional increase in transmission with co-infection") +
+#     theme(panel.grid.major = element_blank(), 
+#         plot.title = element_text(size = 14),  # 14 in pdf format
+#         axis.title = element_text(size = 12), 
+#         axis.text = element_text(size = 12), # 12 
+#         legend.text = element_text(size=12),  # 12 
+#         legend.title = element_text(size = 14),
+#         legend.text.align = 1, 
+#         legend.key.size = unit(1, "cm") )
+
+
+
